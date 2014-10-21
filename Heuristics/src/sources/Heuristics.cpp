@@ -9,6 +9,7 @@
 #include "../headers/FileManager.h"
 #include "../headers/DataParser.h"
 #include "../headers/ProblemData.h"
+#include "../headers/ProblemSolver.h"
 
 using namespace std;
 
@@ -24,6 +25,8 @@ int main()
 	contents = FileManager::getFileContent(filePath);
 
 	problemData = DataParser::parseData(contents);
+
+	ProblemSolver::solve(problemData);
 
 	return 0;
 }
