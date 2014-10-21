@@ -23,12 +23,18 @@ class ProblemSolver
        int node2;
        int saving;
     };
+    struct route_data
+    {
+       vector<int> route;
+       int demandSum;
+    };
 	ProblemSolver(){};
 	static void solve(ProblemData problemData);
 
 	private:
 	static void computeSavings(ProblemData problemData);
 	static int popElement(vector<int>* orderedSavings);
+	static int checkForRoute(map<int, route_data*> routes, int node1, int node2);
 
 };
 

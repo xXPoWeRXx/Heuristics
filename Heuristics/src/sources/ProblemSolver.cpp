@@ -21,10 +21,11 @@
 		vector<vector<int> > edgeWeightSection=problemData.getEdgeWeightSection();
 		int depot = problemData.getDepotSection() -1;
 		map<int, saving_obj*> savingData;
-		map<int, vector<int>*> routes;
+		map<int, route_data*> routes;
 		vector<int> orderedSavings;
-		vector<int>* route;
 		saving_obj* savingObj;
+		route_data* routeData;
+		vector<int> route;
 
 		int saving;
 
@@ -32,13 +33,17 @@
 		{
 			if(depot!=i)
 			{
-				route = new vector<int>;
+				routeData=new route_data;
 
-				route->push_back(depot);
-				route->push_back(i);
-				route->push_back(depot);
+				route.clear();
+				route.push_back(depot);
+				route.push_back(i);
+				route.push_back(depot);
 
-				routes[i]=route;
+				routeData->route=route;
+				routeData->demandSum=edgeWeightSection[depot][i] + edgeWeightSection[i][depot] + edgeWeightSection[depot][i];
+
+				routes[i]=routeData;
 
 				for(size_t j=0; j < edgeWeightSection.size();j++)
 				{
@@ -79,4 +84,31 @@
 		orderedSavings->pop_back();
 
 		return element;
+	}
+
+
+
+	int ProblemSolver::checkForRoute(map<int, route_data*> routes, int node1, int node2)
+	{
+		route_data* routeData;
+		vector<int> route;
+
+		for(map<int, route_data*>::iterator it = routes.begin(); it != routes.end(); ++it)
+		{
+			routeData = routes[it->first];
+			route=routeData->route;
+
+			for(size_t i=0; i< route.size()-1; i++)
+			{
+				if(route[i]==node1)
+				{
+					if(route[i+1]==node2)
+					{
+						return it->first;
+					}
+				}
+			}
+		}
+
+		return -1;
 	}
