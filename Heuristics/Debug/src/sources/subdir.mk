@@ -4,25 +4,19 @@
 
 # Add inputs and outputs from these tool invocations to the build variables 
 CPP_SRCS += \
-../src/sources/BSTree.cpp \
 ../src/sources/DataParser.cpp \
-../src/sources/FibonacciTree.cpp \
 ../src/sources/FileManager.cpp \
 ../src/sources/Heuristics.cpp \
 ../src/sources/ProblemSolver.cpp 
 
 OBJS += \
-./src/sources/BSTree.o \
 ./src/sources/DataParser.o \
-./src/sources/FibonacciTree.o \
 ./src/sources/FileManager.o \
 ./src/sources/Heuristics.o \
 ./src/sources/ProblemSolver.o 
 
 CPP_DEPS += \
-./src/sources/BSTree.d \
 ./src/sources/DataParser.d \
-./src/sources/FibonacciTree.d \
 ./src/sources/FileManager.d \
 ./src/sources/Heuristics.d \
 ./src/sources/ProblemSolver.d 
