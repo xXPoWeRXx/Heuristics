@@ -35,6 +35,7 @@ class ProblemSolver
 	static void computeSavings(ProblemData problemData);
 	static int popElement(vector<int>* orderedSavings);
 	static int checkForRoute(map<int, route_data*> routes, int node1, int node2);
+	static void dump(map<int, route_data*> routes, ProblemData problemData);
 
 };
 
