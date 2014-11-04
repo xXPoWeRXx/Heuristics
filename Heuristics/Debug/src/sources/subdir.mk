@@ -4,22 +4,22 @@
 
 # Add inputs and outputs from these tool invocations to the build variables 
 CPP_SRCS += \
+../src/sources/ClarkeWright.cpp \
 ../src/sources/DataParser.cpp \
 ../src/sources/FileManager.cpp \
-../src/sources/Heuristics.cpp \
-../src/sources/ProblemSolver.cpp 
+../src/sources/Heuristics.cpp 
 
 OBJS += \
+./src/sources/ClarkeWright.o \
 ./src/sources/DataParser.o \
 ./src/sources/FileManager.o \
-./src/sources/Heuristics.o \
-./src/sources/ProblemSolver.o 
+./src/sources/Heuristics.o 
 
 CPP_DEPS += \
+./src/sources/ClarkeWright.d \
 ./src/sources/DataParser.d \
 ./src/sources/FileManager.d \
-./src/sources/Heuristics.d \
-./src/sources/ProblemSolver.d 
+./src/sources/Heuristics.d 
 
 
 # Each subdirectory must supply rules for building sources it contributes

@@ -14,7 +14,7 @@
 using std::make_heap;
 using std::pop_heap;
 
-class ProblemSolver
+class ClarkeWright
 {
 	public:
     struct saving_obj
@@ -28,14 +28,13 @@ class ProblemSolver
        vector<int> route;
        int demandSum;
     };
-	ProblemSolver(){};
+    ClarkeWright(){};
 	static void solve(ProblemData problemData);
 
 	private:
-	static void computeSavings(ProblemData problemData);
 	static int popElement(vector<int>* orderedSavings);
 	static int checkForRoute(map<int, route_data*> routes, int node1, int node2);
-	static void dump(map<int, route_data*> routes, ProblemData problemData);
+	static void dump(map<int, route_data*> routes, ProblemData problemData, bool onlyFO);
 
 };
 
