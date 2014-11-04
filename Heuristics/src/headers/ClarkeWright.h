@@ -10,6 +10,7 @@
 
 #include "ProblemData.h"
 #include <algorithm>
+#include <stdio.h>
 
 using std::make_heap;
 using std::pop_heap;
@@ -28,11 +29,18 @@ class ClarkeWright
        vector<int> route;
        int demandSum;
     };
+    struct Comp
+    {
+       bool operator()(const saving_obj* obj1, const saving_obj* obj2)
+       {
+           return obj1->saving < obj2->saving;
+       }
+    };
     ClarkeWright(){};
 	static void solve(ProblemData problemData);
 
 	private:
-	static float popElement(vector<float>* orderedSavings);
+	static saving_obj* popElement(vector<saving_obj*>* savingData);
 	static int checkForRoute(map<int, route_data*> routes, int node1, int node2);
 	static void dump(map<int, route_data*> routes, ProblemData problemData, bool onlyFO);
 

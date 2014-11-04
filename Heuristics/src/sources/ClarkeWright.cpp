@@ -18,9 +18,8 @@
 		int depot = problemData.getDepotSection() -1;
 		int capacity=problemData.getCapacity();
 		map<int, map<int, bool> > savingsAlreadyDone;
-		map<float, saving_obj*> savingData;
+		vector<saving_obj*> savingData;
 		map<int, route_data*> routes;
-		vector<float> orderedSavings;
 		int orderedSavingsSize;
 		saving_obj* savingObj;
 		route_data* routeData;
@@ -35,14 +34,13 @@
 		float alpha=0.4;
 		float beta=0.4;
 
-		for(alpha=0.4;alpha<=2.1;alpha=alpha+0.2)
+		for(alpha=1.0;alpha<=1.1;alpha=alpha+0.2)
 		{
-			for(beta=0.4;beta<=2.1;beta=beta+0.2)
+			for(beta=1.0;beta<=1.1;beta=beta+0.2)
 			{
 				savingsAlreadyDone.clear();
 				savingData.clear();
 				routes.clear();
-				orderedSavings.clear();
 
 				//compute savings
 				for(size_t i=0; i < edgeWeightSection.size();i++)
@@ -74,10 +72,8 @@
 									savingObj->node2=j;
 									savingObj->saving=saving;
 
-									//add saving to savingData map
-									savingData[saving]=savingObj;
-									//add saving reference for ordering
-									orderedSavings.push_back(saving);
+									//add savingData for ordering
+									savingData.push_back(savingObj);
 								}
 							}
 						}
@@ -85,16 +81,14 @@
 				}
 
 				//order savings
-				make_heap(orderedSavings.begin(), orderedSavings.end());
-				orderedSavingsSize=orderedSavings.size();
+				make_heap(savingData.begin(), savingData.end(), Comp());
+				orderedSavingsSize=savingData.size();
 
 				//merge routes
 				for(int i=0; i<orderedSavingsSize; i++)
 				{
 					//get top saving
-					saving=popElement(&orderedSavings);
-
-					savingObj=savingData[saving];
+					savingObj=popElement(&savingData);
 
 					isSavingAlreadyDone= (savingsAlreadyDone[savingObj->node1][savingObj->node2] || savingsAlreadyDone[savingObj->node2][savingObj->node1]);
 
@@ -136,7 +130,7 @@
 				}
 
 				printf("\n\nAlpha : %f, Beta: %f\n\n", alpha, beta);
-				dump(routes, problemData, true);
+				dump(routes, problemData, false);
 				printf("\n\n");
 			}
 
@@ -148,12 +142,12 @@
 
 
 
-	float ClarkeWright::popElement(vector<float>* orderedSavings)
+	ClarkeWright::saving_obj* ClarkeWright::popElement(vector<saving_obj*>* savingData)
 	{
-		float element = orderedSavings->front();
+		saving_obj* element = savingData->front();
 
-		pop_heap(orderedSavings->begin(), orderedSavings->end());
-		orderedSavings->pop_back();
+		pop_heap(savingData->begin(), savingData->end(), Comp());
+		savingData->pop_back();
 
 		return element;
 	}
