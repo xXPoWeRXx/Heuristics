@@ -21,7 +21,7 @@ int main()
 	ProblemData problemData;
 
 	filePath = FileManager::getDataPath();
-	filePath.append("A034-02f.dat");
+	filePath.append("A071-03f.dat");
 	contents = FileManager::getFileContent(filePath);
 
 	problemData = DataParser::parseData(contents);

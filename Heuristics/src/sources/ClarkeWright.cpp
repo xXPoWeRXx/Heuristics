@@ -19,6 +19,7 @@
 		int capacity=problemData.getCapacity();
 		map<int, map<int, bool> > savingsAlreadyDone;
 		vector<saving_obj*> savingData;
+		map<int, route_data*> routesToPrint;
 		map<int, route_data*> routes;
 		int orderedSavingsSize;
 		saving_obj* savingObj;
@@ -30,13 +31,17 @@
 		route_data* routeDataForMerge1;
 		route_data* routeDataForMerge2;
 		bool isSavingAlreadyDone;
+		int fo=-1;
+		int tempFo;
 
-		float alpha=0.4;
-		float beta=0.4;
+		float alpha;
+		float beta;
+		float alphaToPrint;
+		float betaToPrint;
 
-		for(alpha=1.0;alpha<=1.1;alpha=alpha+0.2)
+		for(alpha=0.4;alpha<=2.1;alpha=alpha+0.2)
 		{
-			for(beta=1.0;beta<=1.1;beta=beta+0.2)
+			for(beta=0.4;beta<=2.1;beta=beta+0.2)
 			{
 				savingsAlreadyDone.clear();
 				savingData.clear();
@@ -98,7 +103,7 @@
 						routeIndexForMerge1=checkForRoute(routes, savingObj->node1, depot);
 						routeIndexForMerge2=checkForRoute(routes, depot, savingObj->node2);
 
-						if(routeIndexForMerge1 != -1 && routeIndexForMerge2 != -1)
+						if(routeIndexForMerge1 != -1 && routeIndexForMerge2 != -1 && routeIndexForMerge1 != routeIndexForMerge2)
 						{
 							routeDataForMerge1=routes[routeIndexForMerge1];
 							routeDataForMerge2=routes[routeIndexForMerge2];
@@ -124,20 +129,31 @@
 
 								routes[routeIndexForMerge1]=routeDataForMerge1;
 								routes.erase(routeIndexForMerge2);
+
 							}
 						}
 					}
 				}
 
-				printf("\n\nAlpha : %f, Beta: %f\n\n", alpha, beta);
-				dump(routes, problemData, false);
-				printf("\n\n");
+
+				tempFo=calculateFO(routes, problemData);
+
+				if(fo<0 || fo>tempFo)
+				{
+					fo=tempFo;
+					routesToPrint=routes;
+					alphaToPrint=alpha;
+					betaToPrint=beta;
+				}
 			}
 
 		}
 
-		printf("END");
+		printf("\n\nAlpha : %f, Beta: %f\n\n", alphaToPrint, betaToPrint);
+		dump(routesToPrint, problemData, false);
+		printf("\n\n");
 
+		printf("END");
 	}
 
 
@@ -179,6 +195,27 @@
 		return -1;
 	}
 
+
+	int ClarkeWright::calculateFO(map<int, route_data*> routes, ProblemData problemData)
+	{
+		route_data* routeData;
+		vector<int> route;
+		vector<vector<int> > edgeWeightSection = problemData.getEdgeWeightSection();
+		int fo=0;
+
+		for(map<int, route_data*>::iterator it = routes.begin(); it != routes.end(); ++it)
+		{
+			routeData = routes[it->first];
+			route=routeData->route;
+
+			for(size_t i=0; i< route.size() -1; i++)
+			{
+				fo+=edgeWeightSection[route[i]][route[i+1]];
+			}
+		}
+
+		return fo;
+	}
 
 	void ClarkeWright::dump(map<int, route_data*> routes, ProblemData problemData, bool onlyFO)
 	{
