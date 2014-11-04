@@ -39,10 +39,19 @@
 		float alphaToPrint;
 		float betaToPrint;
 
+		clock_t begin;
+		clock_t end;
+		int cycles=0;
+		double elapsedSecs=0;
+
+
 		for(alpha=0.4;alpha<=2.1;alpha=alpha+0.2)
 		{
 			for(beta=0.4;beta<=2.1;beta=beta+0.2)
 			{
+				cycles++;
+				begin = clock();
+
 				savingsAlreadyDone.clear();
 				savingData.clear();
 				routes.clear();
@@ -135,6 +144,8 @@
 					}
 				}
 
+				end = clock();
+				elapsedSecs+= double(end - begin) / CLOCKS_PER_SEC;
 
 				tempFo=calculateFO(routes, problemData);
 
@@ -150,10 +161,12 @@
 		}
 
 		printf("\n\nAlpha : %f, Beta: %f\n\n", alphaToPrint, betaToPrint);
-		dump(routesToPrint, problemData, false);
+		printRoutes(routesToPrint, problemData);
+		printf("\nFunzione obiettivo : %d", fo);
+		printf("\n\nTempo di esecuzione medio : %f", elapsedSecs/cycles);
 		printf("\n\n");
 
-		printf("END");
+		printf("Fine");
 	}
 
 
@@ -217,47 +230,31 @@
 		return fo;
 	}
 
-	void ClarkeWright::dump(map<int, route_data*> routes, ProblemData problemData, bool onlyFO)
+	void ClarkeWright::printRoutes(map<int, route_data*> routes, ProblemData problemData)
 	{
 		route_data* routeData;
 		vector<int> route;
 		vector<vector<int> > edgeWeightSection = problemData.getEdgeWeightSection();
+		int routeWeight;
 
-		int fo=0;
-
-		if(!onlyFO)
-		{
-			printf("\nInizio a dumpare routes\n");
-		}
-
+		printf("\nSoluzione trovata:\n");
 		for(map<int, route_data*>::iterator it = routes.begin(); it != routes.end(); ++it)
 		{
+			routeWeight=0;
 			routeData = routes[it->first];
 			route=routeData->route;
 
-			if(!onlyFO)
-			{
-				printf("\nRoute n %d\n", it->first);
-			}
+			printf("\nRoute n: %d\n", it->first);
 
 			for(size_t i=0; i< route.size() -1; i++)
 			{
-				if(!onlyFO)
-				{
-					printf("%d -- ", route[i]);
-				}
-				fo+=edgeWeightSection[route[i]][route[i+1]];
+				routeWeight+=edgeWeightSection[route[i]][route[i+1]];
+				printf(" %d -- %d (%d) \n", route[i]+1, route[i+1]+1, edgeWeightSection[route[i]][route[i+1]]);
 			}
+			printf("Peso route : %d\n", routeWeight);
 
-			if(!onlyFO)
-			{
-				printf("%d -- ", route[route.size()-1]);
-				printf("\nFINE ROUTE\n ");
-			}
+			printf("\nFine route\n ");
 		}
-
-		printf("\nFUNZIONE OBIETTIVO : %d\n", fo);
-
 	}
 
 

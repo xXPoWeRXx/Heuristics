@@ -42,7 +42,7 @@ class ClarkeWright
 	private:
 	static saving_obj* popElement(vector<saving_obj*>* savingData);
 	static int checkForRoute(map<int, route_data*> routes, int node1, int node2);
-	static void dump(map<int, route_data*> routes, ProblemData problemData, bool onlyFO);
+	static void printRoutes(map<int, route_data*> routes, ProblemData problemData);
 	static int calculateFO(map<int, route_data*> routes, ProblemData problemData);
 
 };
