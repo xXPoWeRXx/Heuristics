@@ -23,6 +23,8 @@
 		string demandSectionLabel="DEMAND_SECTION";
 		string depotSectionLabel="DEPOT_SECTION";
 
+		string nameToTrim;
+
 		vector<vector<int> > edgeWeightSection;
 		vector<string> tokenSplittedHelper;
 		vector<int> tokenSplittedBuff;
@@ -43,7 +45,9 @@
 		{
 			if(splitResult[i].find(nameLabel) != string::npos)
 			{
-				problemData.setName(splitResult[i].substr(nameLabel.size(), splitResult[i].size() ));
+				nameToTrim=splitResult[i].substr(nameLabel.size(), splitResult[i].size() );
+				nameToTrim.erase(remove(nameToTrim.begin(), nameToTrim.end(), '\r'), nameToTrim.end());
+				problemData.setName(nameToTrim);
 			}
 			else if(splitResult[i].find(commentLabel) != string::npos)
 			{

@@ -19,6 +19,7 @@
 using std::string;
 using std::stringstream;
 using std::remove_if;
+using std::remove;
 
 class DataParser
 {

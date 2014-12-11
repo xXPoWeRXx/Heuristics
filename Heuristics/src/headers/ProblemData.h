@@ -121,6 +121,13 @@ class ProblemData
 		this->depotSection = depotSection;
 	}
 
+	const map<string, int>& getOptimalSolution() const {
+		return optimalSolution;
+	}
+
+	void setOptimalSolution(const map<string, int>& optimalSolution) {
+		this->optimalSolution = optimalSolution;
+	}
 	;
 
 	private:
@@ -136,6 +143,7 @@ class ProblemData
 	vector<vector<int> > edgeWeightSection;
 	map <int, int> demandSection;
 	int depotSection;
+	map <string, int> optimalSolution;
 
 };
 

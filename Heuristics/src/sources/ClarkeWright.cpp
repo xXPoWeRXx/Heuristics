@@ -15,7 +15,9 @@
 
 		vector<vector<int> > edgeWeightSection=problemData.getEdgeWeightSection();
 		map<int, int> demandSection = problemData.getDemandSection();
+		map<string, int> optimalSolutions=problemData.getOptimalSolution();
 		int depot = problemData.getDepotSection() -1;
+		string problemName=problemData.getName();
 		int capacity=problemData.getCapacity();
 		map<int, map<int, bool> > savingsAlreadyDone;
 		vector<saving_obj*> savingData;
@@ -32,7 +34,13 @@
 		route_data* routeDataForMerge2;
 		bool isSavingAlreadyDone;
 		int fo=-1;
+		int optimalSolution=optimalSolutions[problemName];
+
+		float gap=-1;
 		int tempFo;
+
+		int foA1B1=-1;
+		map<int, route_data*> routesToPrintA1B1;
 
 		float alpha;
 		float beta;
@@ -156,14 +164,35 @@
 					alphaToPrint=alpha;
 					betaToPrint=beta;
 				}
+
+				if(alpha==1 && beta==1)
+				{
+					foA1B1=tempFo;
+					routesToPrintA1B1=routes;
+				}
 			}
 
 		}
 
+		gap=100.00f * (fo - optimalSolution) / optimalSolution;
+
+		printf("\n\nAlpha : 1, Beta: 1\n\n");
+		printRoutes(routesToPrintA1B1, problemData);
+		printf("\nFunzione obiettivo : %d", foA1B1);
+
+		printf("\n\n\n\nMIGLIORE SOLUZIONE TROVATA:\n");
+
 		printf("\n\nAlpha : %f, Beta: %f\n\n", alphaToPrint, betaToPrint);
 		printRoutes(routesToPrint, problemData);
+
 		printf("\nFunzione obiettivo : %d", fo);
+
+		printf("\nSoluzione ottima (fornita): %d", optimalSolution);
+
+		printf("\n\nGap tra la soluzione migliore trovata e quella ottima (fornita) : %f%  \n\n", gap);
+
 		printf("\n\nTempo di esecuzione medio : %f", elapsedSecs/cycles);
+
 		printf("\n\n");
 
 		printf("Fine");
