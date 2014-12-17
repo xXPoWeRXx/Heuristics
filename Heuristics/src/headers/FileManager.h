@@ -32,6 +32,7 @@ class FileManager
 	FileManager(){};
 	static string getDataPath();
 	static string getFileContent(string filePath);
+	static string getFilePath(string fileName);
 
 	private:
 	static string getProjectPath();

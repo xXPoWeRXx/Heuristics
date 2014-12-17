@@ -6,6 +6,7 @@
  */
 
 #include "../headers/ClarkeWright.h"
+#include "../headers/FileManager.h"
 #include <stdio.h>
 
 
@@ -13,6 +14,7 @@
 	void ClarkeWright::solve(ProblemData problemData)
 	{
 
+		FILE * resultFile;
 		vector<vector<int> > edgeWeightSection=problemData.getEdgeWeightSection();
 		map<int, int> demandSection = problemData.getDemandSection();
 		map<string, int> optimalSolutions=problemData.getOptimalSolution();
@@ -176,26 +178,29 @@
 
 		gap=100.00f * (fo - optimalSolution) / optimalSolution;
 
-		printf("\n\nAlpha : 1, Beta: 1\n\n");
-		printRoutes(routesToPrintA1B1, problemData);
-		printf("\nFunzione obiettivo : %d", foA1B1);
+		resultFile = fopen(FileManager::getFilePath("result.txt").c_str(),"w");
 
-		printf("\n\n\n\nMIGLIORE SOLUZIONE TROVATA:\n");
+		fprintf(resultFile, "RISULTATO:");
+		fprintf(resultFile, "\n\nAlpha : 1, Beta: 1\n\n");
+		printRoutes(routesToPrintA1B1, problemData, resultFile);
+		fprintf(resultFile,"\nFunzione obiettivo : %d", foA1B1);
 
-		printf("\n\nAlpha : %f, Beta: %f\n\n", alphaToPrint, betaToPrint);
-		printRoutes(routesToPrint, problemData);
+		fprintf(resultFile,"\n\n\n\nMIGLIORE SOLUZIONE TROVATA:\n");
 
-		printf("\nFunzione obiettivo : %d", fo);
+		fprintf(resultFile,"\n\nAlpha : %f, Beta: %f\n\n", alphaToPrint, betaToPrint);
+		printRoutes(routesToPrint, problemData, resultFile);
 
-		printf("\nSoluzione ottima (fornita): %d", optimalSolution);
+		fprintf(resultFile,"\nFunzione obiettivo : %d", fo);
 
-		printf("\n\nGap tra la soluzione migliore trovata e quella ottima (fornita) : %f%  \n\n", gap);
+		fprintf(resultFile,"\nSoluzione ottima (fornita): %d", optimalSolution);
 
-		printf("\n\nTempo di esecuzione medio : %f", elapsedSecs/cycles);
+		fprintf(resultFile,"\n\nGap tra la soluzione migliore trovata e quella ottima (fornita) : %f%  \n\n", gap);
 
-		printf("\n\n");
+		fprintf(resultFile,"\n\nTempo di esecuzione medio : %f", elapsedSecs/cycles);
 
-		printf("Fine");
+		fprintf(resultFile,"\n\n");
+
+		fprintf(resultFile,"Fine\n");
 	}
 
 
@@ -259,30 +264,30 @@
 		return fo;
 	}
 
-	void ClarkeWright::printRoutes(map<int, route_data*> routes, ProblemData problemData)
+	void ClarkeWright::printRoutes(map<int, route_data*> routes, ProblemData problemData, FILE * resultFile)
 	{
 		route_data* routeData;
 		vector<int> route;
 		vector<vector<int> > edgeWeightSection = problemData.getEdgeWeightSection();
 		int routeWeight;
 
-		printf("\nSoluzione trovata:\n");
+		fprintf(resultFile, "\nSoluzione trovata:\n");
 		for(map<int, route_data*>::iterator it = routes.begin(); it != routes.end(); ++it)
 		{
 			routeWeight=0;
 			routeData = routes[it->first];
 			route=routeData->route;
 
-			printf("\nRoute n: %d\n", it->first);
+			fprintf(resultFile, "\nRoute n: %d\n", it->first);
 
 			for(size_t i=0; i< route.size() -1; i++)
 			{
 				routeWeight+=edgeWeightSection[route[i]][route[i+1]];
-				printf(" %d -- %d (%d) \n", route[i]+1, route[i+1]+1, edgeWeightSection[route[i]][route[i+1]]);
+				fprintf(resultFile, " %d -- %d (%d) \n", route[i]+1, route[i+1]+1, edgeWeightSection[route[i]][route[i+1]]);
 			}
-			printf("Peso route : %d\n", routeWeight);
+			fprintf(resultFile, "Peso route : %d\n", routeWeight);
 
-			printf("\nFine route\n ");
+			fprintf(resultFile, "\nFine route\n ");
 		}
 	}
 

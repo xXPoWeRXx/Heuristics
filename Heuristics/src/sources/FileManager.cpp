@@ -38,6 +38,14 @@
 		return contents;
 	}
 
+	string FileManager::getFilePath(string fileName)
+	{
+		string path=FileManager::getProjectPath();
+		path.append("/").append(fileName);
+
+		return path;
+	}
+
 	string FileManager::getProjectPath()
 	{
 		char cCurrentPath[FILENAME_MAX];
