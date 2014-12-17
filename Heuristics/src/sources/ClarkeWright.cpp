@@ -201,6 +201,10 @@
 		fprintf(resultFile,"\n\n");
 
 		fprintf(resultFile,"Fine\n");
+
+		fclose(resultFile);
+
+		printf("\n\nRisultato salvato in 'result.txt'\n");
 	}
 
 
