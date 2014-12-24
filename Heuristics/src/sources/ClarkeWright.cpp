@@ -79,7 +79,7 @@
 						route.push_back(depot);
 
 						routeData->route=route;
-						routeData->demandSum=demandSection[i];
+						routeData->demandSum=demandSection[i+1];
 
 						routes[i]=routeData;
 
@@ -273,12 +273,16 @@
 		route_data* routeData;
 		vector<int> route;
 		vector<vector<int> > edgeWeightSection = problemData.getEdgeWeightSection();
+		map<int, int> demandSection = problemData.getDemandSection();
+
 		int routeWeight;
+		int routeCapacity;
 
 		fprintf(resultFile, "\nSoluzione trovata:\n");
 		for(map<int, route_data*>::iterator it = routes.begin(); it != routes.end(); ++it)
 		{
 			routeWeight=0;
+			routeCapacity=0;
 			routeData = routes[it->first];
 			route=routeData->route;
 
@@ -287,9 +291,11 @@
 			for(size_t i=0; i< route.size() -1; i++)
 			{
 				routeWeight+=edgeWeightSection[route[i]][route[i+1]];
+				routeCapacity+=demandSection[route[i]+1];
 				fprintf(resultFile, " %d -- %d (%d) \n", route[i]+1, route[i+1]+1, edgeWeightSection[route[i]][route[i+1]]);
 			}
 			fprintf(resultFile, "Peso route : %d\n", routeWeight);
+			fprintf(resultFile, "Capacita' richiesta route : %d\n", routeCapacity);
 
 			fprintf(resultFile, "\nFine route\n ");
 		}
