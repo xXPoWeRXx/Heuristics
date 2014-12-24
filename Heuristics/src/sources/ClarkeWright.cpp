@@ -37,6 +37,8 @@
 		bool isSavingAlreadyDone;
 		int fo=-1;
 		int optimalSolution=optimalSolutions[problemName];
+		int weightSumCheck=optimalSolution;
+		int weightSum;
 
 		float gap=-1;
 		int tempFo;
@@ -80,6 +82,7 @@
 
 						routeData->route=route;
 						routeData->demandSum=demandSection[i+1];
+						routeData->weightSum=edgeWeightSection[depot][i] + edgeWeightSection[i][depot];
 
 						routes[i]=routeData;
 
@@ -127,28 +130,34 @@
 							routeDataForMerge1=routes[routeIndexForMerge1];
 							routeDataForMerge2=routes[routeIndexForMerge2];
 
-							//check sum capacity
+							//check capacity sum
 
 							if(routeDataForMerge1->demandSum + routeDataForMerge2->demandSum <= capacity)
 							{
-								route.clear();
+								//check weight sum
+								weightSum = routeDataForMerge1->weightSum + routeDataForMerge2->weightSum - edgeWeightSection[savingObj->node1][depot] - edgeWeightSection[depot][savingObj->node2] + edgeWeightSection[savingObj->node1][savingObj->node2];
 
-								//i,0 is always at 1st route ending -- 0,j is always at 2nd route beginning
-								route.assign(routeDataForMerge1->route.begin(), routeDataForMerge1->route.end()-2);
-								route.push_back(savingObj->node1);
-								route.push_back(savingObj->node2);
-								route.insert(route.end(), routeDataForMerge2->route.begin()+2, routeDataForMerge2->route.end());
+								if(weightSum <= weightSumCheck )
+								{
+									route.clear();
 
-								savingsAlreadyDone[savingObj->node1][savingObj->node2]=true;
+									//i,0 is always at 1st route ending -- 0,j is always at 2nd route beginning
+									route.assign(routeDataForMerge1->route.begin(), routeDataForMerge1->route.end()-2);
+									route.push_back(savingObj->node1);
+									route.push_back(savingObj->node2);
+									route.insert(route.end(), routeDataForMerge2->route.begin()+2, routeDataForMerge2->route.end());
 
-								routeDataForMerge1->route = route;
-								routeDataForMerge1->demandSum = routeDataForMerge1->demandSum + routeDataForMerge2->demandSum;
+									savingsAlreadyDone[savingObj->node1][savingObj->node2]=true;
 
-								routeDataForMerge2=NULL;
+									routeDataForMerge1->route = route;
+									routeDataForMerge1->demandSum = routeDataForMerge1->demandSum + routeDataForMerge2->demandSum;
+									routeDataForMerge1->weightSum=weightSum;
 
-								routes[routeIndexForMerge1]=routeDataForMerge1;
-								routes.erase(routeIndexForMerge2);
+									routeDataForMerge2=NULL;
 
+									routes[routeIndexForMerge1]=routeDataForMerge1;
+									routes.erase(routeIndexForMerge2);
+								}
 							}
 						}
 					}

@@ -28,6 +28,7 @@ class ClarkeWright
     {
        vector<int> route;
        int demandSum;
+       int weightSum;
     };
     struct Comp
     {
